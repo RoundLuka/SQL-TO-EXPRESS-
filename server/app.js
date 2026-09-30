@@ -1,10 +1,9 @@
 const express = require('express');
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const connectToDatabase = require('./config/db');
+const { poolPromise } = require('./config/db');
+const productRouter = require('./routers/products.router');
 
-// constants
-const PORT = 3000
 
 const app = express();
 
@@ -14,18 +13,15 @@ app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-// app.get('/', (req, res, next) => {
-//     select * 
-// })
+// using routers
 
+app.use('/api/products', productRouter)
 
-const database = connectToDatabase()
+poolPromise
     .then(() => {
-        app.listen(PORT, () => console.log("Server is running"))
+        app.listen(3000, () => console.log("Server is running"))
     })
-    .catch((err) => console.error(err));
-
-app.get('/', async (req, res) => {
-    const result = await database.request().query('SELECT * from Cars');
-    console.log(result);
-})
+    .catch((err) => {
+        console.error("Unable to connect to the database", err);
+        process.exitCode = 1;
+    });

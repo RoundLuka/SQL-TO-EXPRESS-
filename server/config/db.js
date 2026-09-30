@@ -11,12 +11,14 @@ const config = {
     }
 };
 
-async function connectToDatabase() {
-    // 2. Establish the connection pool
-    const pool = await sql.connect(config);
-    console.log("Connected to MSSQL successfully!");
+const poolPromise = new sql.ConnectionPool(config)
+    .connect()
+    .then((pool) => {
+        console.log("Connected to MSSQL successfully!");
+        return pool;
+    });
 
-    return pool
-}
-
-module.exports = connectToDatabase;
+module.exports = {
+    sql,
+    poolPromise
+};
