@@ -2,9 +2,9 @@ const sql = require('mssql');
 
 const config = {
     server: '127.0.0.1', // update me
-    database: 'AutoShop',                  // update me
-    user: 'Luka',                      // update me
-    password: 'lukaluka',                  // update me
+    database: 'Online Market',                  // update me
+    user: process.env.DB_USER,                      // update me
+    password: process.env.DB_PASSWORD,                  // update me
     options: {
         encrypt: true,                          // True if you're on Microsoft Azure
         trustServerCertificate: true           // False for Azure (forces certificate validation)
